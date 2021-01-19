@@ -1,7 +1,9 @@
 package g
 
+// Rect rectangle
 type Rect struct{ Min, Max V2 }
 
+// NewRect a new instance of Rect
 func NewRect(w, h float32) Rect {
 	return Rect{
 		V2{-w / 2, -h / 2},
@@ -9,18 +11,23 @@ func NewRect(w, h float32) Rect {
 	}
 }
 
+// NewCircleRect a new instance of Rect bounding circle of radius r
 func NewCircleRect(r float32) Rect {
 	return Rect{V2{-r, -r}, V2{r, r}}
 }
 
+// Size size of a rect
 func (r Rect) Size() V2 { return r.Max.Sub(r.Min) }
 
+// Offset offsets the rect by delta
 func (r Rect) Offset(delta V2) Rect {
 	return Rect{
 		r.Min.Add(delta),
 		r.Max.Add(delta),
 	}
 }
+
+// ScaleInv scale inv
 func (r Rect) ScaleInv(v V2) Rect {
 	return Rect{
 		V2{
@@ -34,11 +41,13 @@ func (r Rect) ScaleInv(v V2) Rect {
 	}
 }
 
+// Contains if rect contains point
 func (r Rect) Contains(p V2) bool {
 	return (r.Min.X <= p.X) && (p.X <= r.Max.X) &&
 		(r.Min.Y <= p.Y) && (p.Y <= r.Max.Y)
 }
 
+// EnforceInside enforces inside
 func EnforceInside(pos, vel *V2, bounds Rect, dampening float32) {
 	minx, maxx := MinMax(bounds.Min.X, bounds.Max.X)
 	if pos.X < minx {

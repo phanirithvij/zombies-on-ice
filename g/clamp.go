@@ -31,6 +31,7 @@ func ClampUnit(a float32) float32 {
 	return a
 }
 
+// ClampLength clamp a length
 func ClampLength(a V2, maxsize float32) V2 {
 	n := a.Length()
 	if n > maxsize {

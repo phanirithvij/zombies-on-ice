@@ -14,10 +14,12 @@ func Sqrt(v float32) float32 {
 	return float32(math.Sqrt(float64(v)))
 }
 
+// Pow exponentiation
 func Pow(v, e float32) float32 {
 	return float32(math.Pow(float64(v), float64(e)))
 }
 
+// ApplyDeadZone applies a dead zone
 func ApplyDeadZone(v float32, deadZone float32) float32 {
 	if v < -deadZone {
 		return (v + deadZone) / (1 - deadZone)
@@ -28,10 +30,12 @@ func ApplyDeadZone(v float32, deadZone float32) float32 {
 	return 0.0
 }
 
+// RandomBetween random number between a, b
 func RandomBetween(a, b float32) float32 {
 	return rand.Float32()*(b-a) + a
 }
 
+// Max max of a, b
 func Max(a, b float32) float32 {
 	if a > b {
 		return a
@@ -39,6 +43,7 @@ func Max(a, b float32) float32 {
 	return b
 }
 
+// Min min of a, b
 func Min(a, b float32) float32 {
 	if a < b {
 		return a
@@ -46,6 +51,7 @@ func Min(a, b float32) float32 {
 	return b
 }
 
+// MinMax min and max of a, b
 func MinMax(a, b float32) (float32, float32) {
 	if a < b {
 		return a, b
@@ -53,6 +59,7 @@ func MinMax(a, b float32) (float32, float32) {
 	return b, a
 }
 
+// Abs abs of a
 func Abs(a float32) float32 {
 	if a < 0 {
 		return -a
@@ -60,6 +67,7 @@ func Abs(a float32) float32 {
 	return a
 }
 
+// Mod x % y for floats
 func Mod(x, y float32) float32 {
 	return float32(math.Mod(float64(x), float64(y)))
 }

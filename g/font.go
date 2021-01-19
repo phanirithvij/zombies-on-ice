@@ -2,6 +2,7 @@ package g
 
 import "strings"
 
+// Font font struct
 type Font struct {
 	Texture      *Texture
 	Glyphs       string
@@ -9,11 +10,13 @@ type Font struct {
 	GlyphSize    V2
 }
 
+// Width font's width
 func (font *Font) Width(text string, glyphHeight float32) float32 {
 	glyphWidth := glyphHeight * font.GlyphSize.X / font.GlyphSize.Y
 	return glyphWidth * float32(len(text))
 }
 
+// DrawLines draws lines
 func (font *Font) DrawLines(lines []string, position V2, glyphHeight, lineHeight float32) {
 	for _, line := range lines {
 		font.Draw(line, position, glyphHeight)
@@ -21,6 +24,7 @@ func (font *Font) DrawLines(lines []string, position V2, glyphHeight, lineHeight
 	}
 }
 
+// Draw draws text
 func (font *Font) Draw(text string, position V2, glyphHeight float32) {
 	if font.GlyphsPerRow == 0 {
 		font.GlyphsPerRow = int(font.Texture.Size.X / font.GlyphSize.X)
@@ -57,6 +61,7 @@ func (font *Font) Draw(text string, position V2, glyphHeight float32) {
 	}
 }
 
+// DrawColored draws colored text
 func (font *Font) DrawColored(text string, position V2, glyphHeight float32, color Color) {
 	if font.GlyphsPerRow == 0 {
 		font.GlyphsPerRow = int(font.Texture.Size.X / font.GlyphSize.X)

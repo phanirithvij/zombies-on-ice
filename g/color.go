@@ -1,7 +1,9 @@
 package g
 
+// Color color
 type Color struct{ R, G, B, A uint8 }
 
+// LerpColor lerp color
 func LerpColor(a, b Color, p float32) Color {
 	ar, ag, ab, aa := a.Float()
 	br, bg, bb, ba := b.Float()
@@ -14,12 +16,14 @@ func LerpColor(a, b Color, p float32) Color {
 	)
 }
 
+// RGB colors
 var (
 	Red   = Color{0xFF, 0x00, 0x00, 0xFF}
 	Green = Color{0x00, 0xFF, 0x00, 0xFF}
 	Blue  = Color{0x00, 0x00, 0xFF, 0xFF}
 )
 
+// ColorHex hex to rgb color
 func ColorHex(hex uint32) Color {
 	return Color{
 		R: uint8(hex >> 24),
@@ -29,30 +33,37 @@ func ColorHex(hex uint32) Color {
 	}
 }
 
+// ColorFloat rgb float to color
 func ColorFloat(r, g, b, a float32) Color {
 	return Color{Sat8(r), Sat8(g), Sat8(b), Sat8(a)}
 }
 
+// ColorHSLA hsla to color
 func ColorHSLA(h, s, l, a float32) Color { return ColorFloat(hsla(h, s, l, a)) }
-func ColorHSL(h, s, l float32) Color     { return ColorHSLA(h, s, l, 1) }
 
+// ColorHSL hsl to color
+func ColorHSL(h, s, l float32) Color { return ColorHSLA(h, s, l, 1) }
+
+// Float color to rgba floats
 func (c Color) Float() (r, g, b, a float32) {
 	return float32(c.R) / 0xFF, float32(c.G) / 0xFF, float32(c.B) / 0xFF, float32(c.A) / 0xFF
 }
 
+// WithAlpha color with updated alpha
 func (c Color) WithAlpha(a uint8) Color {
 	c.A = a
 	return c
 }
 
+// RGBA color to rgba uint8s
 func (c Color) RGBA() (r, g, b, a uint8) { return c.R, c.G, c.B, c.A }
 
 func hue(v1, v2, h float32) float32 {
 	if h < 0 {
-		h += 1
+		h++
 	}
 	if h > 1 {
-		h -= 1
+		h--
 	}
 	if 6*h < 1 {
 		return v1 + (v2-v1)*6*h
@@ -88,6 +99,7 @@ func hsla(h, s, l, a float32) (r, g, b, ra float32) {
 	return
 }
 
+// Sat8 sat8
 func Sat8(v float32) uint8 {
 	v *= 255.0
 	if v >= 255 {

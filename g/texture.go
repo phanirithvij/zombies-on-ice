@@ -8,12 +8,14 @@ import (
 	"time"
 
 	"image/draw"
+	// reading jpeg and png images as textures
 	_ "image/jpeg"
 	_ "image/png"
 
-	"github.com/go-gl/gl/v2.1/gl"
+	"github.com/go-gl/gl/v3.3-compatibility/gl"
 )
 
+// Texture a texture
 type Texture struct {
 	Path string
 
@@ -37,6 +39,7 @@ func (tex *Texture) check(err error) bool {
 	return false
 }
 
+// Reload reloads the texture from the file
 func (tex *Texture) Reload() {
 	stat, err := os.Stat(filepath.FromSlash(tex.Path))
 	if tex.check(err) {
@@ -64,6 +67,7 @@ func (tex *Texture) Reload() {
 	tex.Upload()
 }
 
+// Draw draws the texture
 func (tex *Texture) Draw(dst Rect) {
 	gl.ActiveTexture(gl.TEXTURE0)
 	gl.Enable(gl.TEXTURE_2D)
@@ -89,6 +93,7 @@ func (tex *Texture) Draw(dst Rect) {
 	gl.Disable(gl.TEXTURE_2D)
 }
 
+// DrawColored draws the texture with color
 func (tex *Texture) DrawColored(dst Rect, color Color) {
 	gl.ActiveTexture(gl.TEXTURE0)
 	gl.Enable(gl.TEXTURE_2D)
@@ -114,6 +119,7 @@ func (tex *Texture) DrawColored(dst Rect, color Color) {
 	gl.Disable(gl.TEXTURE_2D)
 }
 
+// DrawSub draws in a sub rect
 func (tex *Texture) DrawSub(dst Rect, src Rect) {
 	gl.ActiveTexture(gl.TEXTURE0)
 	gl.Enable(gl.TEXTURE_2D)
@@ -139,6 +145,7 @@ func (tex *Texture) DrawSub(dst Rect, src Rect) {
 	gl.Disable(gl.TEXTURE_2D)
 }
 
+// DrawSubColored draws in a sub rect with color
 func (tex *Texture) DrawSubColored(dst Rect, src Rect, color Color) {
 	gl.ActiveTexture(gl.TEXTURE0)
 	gl.Enable(gl.TEXTURE_2D)
@@ -164,6 +171,7 @@ func (tex *Texture) DrawSubColored(dst Rect, src Rect, color Color) {
 	gl.Disable(gl.TEXTURE_2D)
 }
 
+// Line draws a line on the texture
 func (tex *Texture) Line(from, to V2, width float32) {
 	length := to.Sub(from).Length()
 	normal := to.Sub(from).Rotate90().Normalize().Scale(width / 2)
@@ -192,6 +200,7 @@ func (tex *Texture) Line(from, to V2, width float32) {
 	gl.Disable(gl.TEXTURE_2D)
 }
 
+// LineColored colored line
 func (tex *Texture) LineColored(from, to V2, width float32, color Color) {
 	length := to.Sub(from).Length()
 	normal := to.Sub(from).Rotate90().Normalize().Scale(width / 2)
@@ -220,6 +229,7 @@ func (tex *Texture) LineColored(from, to V2, width float32, color Color) {
 	gl.Disable(gl.TEXTURE_2D)
 }
 
+// Upload uploads the texture
 func (tex *Texture) Upload() {
 	log.Println("Upload texture", tex.Path)
 
@@ -255,6 +265,7 @@ func (tex *Texture) Upload() {
 	tex.check(glerror())
 }
 
+// Delete deletes the texture
 func (tex *Texture) Delete() {
 	if tex.ID == 0 {
 		return
