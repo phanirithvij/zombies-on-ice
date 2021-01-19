@@ -6,6 +6,7 @@ import (
 	"github.com/go-gl/glfw/v3.3/glfw"
 )
 
+// Controllers state of the controllers
 type Controllers struct {
 	All       []ControllerUpdater
 	Unplugged []ControllerUpdater
@@ -14,21 +15,23 @@ type Controllers struct {
 	Removed map[*Controller]bool
 }
 
+// PluggedController a pluggedin controller
 type PluggedController struct {
 	Controller *Controller
 	Updater    ControllerUpdater
 }
 
+// NewControllers a new instance of controllers
 func NewControllers() *Controllers {
 	controllers := &Controllers{
 		All: []ControllerUpdater{
-			&Keyboard_0,
-			&Keyboard_1,
+			&Keyboard0,
+			&Keyboard1,
 
-			&Gamepad_0,
-			&Gamepad_1,
-			&Gamepad_2,
-			&Gamepad_3,
+			&Gamepad0,
+			&Gamepad1,
+			&Gamepad2,
+			&Gamepad3,
 		},
 	}
 
@@ -39,6 +42,7 @@ func NewControllers() *Controllers {
 	return controllers
 }
 
+// Update updates the controllers
 func (controllers *Controllers) Update(window *glfw.Window) {
 	plugged := []*PluggedController{}
 	unplugged := []ControllerUpdater{}
@@ -72,7 +76,8 @@ func (controllers *Controllers) Update(window *glfw.Window) {
 }
 
 var (
-	Keyboard_0 = Keyboard{
+	// Keyboard0 the main arrow keyboard
+	Keyboard0 = Keyboard{
 		Up:    glfw.KeyUp,
 		Down:  glfw.KeyDown,
 		Left:  glfw.KeyLeft,
@@ -84,8 +89,8 @@ var (
 		A: glfw.KeyO,
 		B: glfw.KeyP,
 	}
-
-	Keyboard_1 = Keyboard{
+	// Keyboard1 the main awsd keyboard
+	Keyboard1 = Keyboard{
 		Up:    glfw.KeyW,
 		Down:  glfw.KeyS,
 		Left:  glfw.KeyA,
@@ -98,8 +103,12 @@ var (
 		B: glfw.KeyQ,
 	}
 
-	Gamepad_0 = Gamepad{glfw.Joystick1, 0.05}
-	Gamepad_1 = Gamepad{glfw.Joystick2, 0.05}
-	Gamepad_2 = Gamepad{glfw.Joystick3, 0.05}
-	Gamepad_3 = Gamepad{glfw.Joystick4, 0.05}
+	// Gamepad0 the 0th gamepad
+	Gamepad0 = Gamepad{glfw.Joystick1, 0.05}
+	// Gamepad1 the 1st gamepad
+	Gamepad1 = Gamepad{glfw.Joystick2, 0.05}
+	// Gamepad2 the 2nd gamepad
+	Gamepad2 = Gamepad{glfw.Joystick3, 0.05}
+	// Gamepad3 the 3rd gamepad
+	Gamepad3 = Gamepad{glfw.Joystick4, 0.05}
 )

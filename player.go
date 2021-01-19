@@ -6,6 +6,7 @@ import (
 	"github.com/adinfinit/zombies-on-ice/g"
 )
 
+// Player player struct
 type Player struct {
 	ID    int
 	Color g.Color
@@ -19,6 +20,7 @@ type Player struct {
 	Hammer     Hammer
 }
 
+// Entities entities for the player
 func (player *Player) Entities() []*Entity {
 	xs := []*Entity{}
 	xs = append(xs, player.Survivor.Entities()...)
@@ -27,6 +29,7 @@ func (player *Player) Entities() []*Entity {
 	return xs
 }
 
+// Hammer player's hammer
 type Hammer struct {
 	Entity
 
@@ -39,8 +42,10 @@ type Hammer struct {
 	VelocityDampening float32
 }
 
+// MovementForce movement force
 const MovementForce = 200
 
+// NewPlayer a new instance of a player
 func NewPlayer(id int) *Player {
 	player := &Player{}
 
@@ -50,8 +55,8 @@ func NewPlayer(id int) *Player {
 	player.Health = 1.0
 	player.Points = 0.0
 
-	player.Survivor.Position = g.V2{2, 0}.Rotate(g.Phi * float32(id))
-	player.Hammer.Position = g.V2{0.5, 0}.Rotate(g.Phi * float32(id))
+	player.Survivor.Position = g.V2{X: 2, Y: 0}.Rotate(g.Phi * float32(id))
+	player.Hammer.Position = g.V2{X: 0.5, Y: 0}.Rotate(g.Phi * float32(id))
 
 	player.Survivor.Radius = 0.5
 	player.Survivor.Mass = 5.0
@@ -76,14 +81,17 @@ func NewPlayer(id int) *Player {
 	return player
 }
 
+// Died whether the player is dead
 func (player *Player) Died() bool {
 	return player.Health < 0.0
 }
 
+// Respawn the player is respawned
 func (player *Player) Respawn() {
 	*player = *NewPlayer(player.ID)
 }
 
+// Update updates the forces on the player
 func (player *Player) Update(dt float32) {
 	survivor, hammer := &player.Survivor, &player.Hammer
 
@@ -116,8 +124,8 @@ func (player *Player) Update(dt float32) {
 		tension := delta * hammer.TensionMultiplier
 
 		pull := g.V2{
-			offset.X * tension / (length + 1),
-			offset.Y * tension / (length + 1),
+			X: offset.X * tension / (length + 1),
+			Y: offset.Y * tension / (length + 1),
 		}
 
 		if delta > hammer.MaxLength {
@@ -130,6 +138,7 @@ func (player *Player) Update(dt float32) {
 	}
 }
 
+// ApplyConstraints applies the constraints
 func (player *Player) ApplyConstraints(bounds g.Rect) {
 	survivor, hammer := &player.Survivor, &player.Hammer
 
@@ -142,6 +151,7 @@ func (player *Player) ApplyConstraints(bounds g.Rect) {
 	}
 }
 
+// Render renders the player
 func (player *Player) Render(game *Game) {
 	survivor, hammer := &player.Survivor, &player.Hammer
 

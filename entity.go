@@ -2,14 +2,17 @@ package main
 
 import "github.com/adinfinit/zombies-on-ice/g"
 
+// Collision collision struct
 type Collision struct {
 	A, B          *Entity
 	Normal        g.V2
 	VelocityDelta g.V2
 }
 
+// CollisionLayer collision layer
 type CollisionLayer uint8
 
+// Entity an entity struct
 type Entity struct {
 	Position g.V2
 	Velocity g.V2
@@ -27,8 +30,10 @@ type Entity struct {
 	CollisionMask    CollisionLayer
 }
 
+// Entities entities
 func (en *Entity) Entities() []*Entity { return []*Entity{en} }
 
+// ResetForces resets the forces
 func (en *Entity) ResetForces() {
 	en.Force = g.V2{}
 	if en.Mass == 0 {
@@ -38,10 +43,12 @@ func (en *Entity) ResetForces() {
 	en.Collision = nil
 }
 
+// AddForce adds a force to entity
 func (en *Entity) AddForce(force g.V2) {
 	en.Force = en.Force.Add(force)
 }
 
+// IntegrateForces integrates forces
 func (en *Entity) IntegrateForces(dt float32) {
 	const MaxEntitySpeed = 20
 
@@ -51,10 +58,12 @@ func (en *Entity) IntegrateForces(dt float32) {
 	en.Position = en.Position.AddScale(en.Velocity, dt)
 }
 
+// ConstrainInside constrains inside bounds
 func (en *Entity) ConstrainInside(rect g.Rect) {
 	g.EnforceInside(&en.Position, &en.Velocity, rect, en.Elasticity)
 }
 
+// HandleCollisions handles collisions
 func HandleCollisions(entities []*Entity, dt float32) {
 	const SafeZone = 0.75
 

@@ -8,6 +8,7 @@ import (
 	"github.com/adinfinit/zombies-on-ice/g"
 )
 
+// Zombie a zombie
 type Zombie struct {
 	Entity
 
@@ -16,6 +17,7 @@ type Zombie struct {
 	Frame     int
 }
 
+// NewZombie a new instance of zombie
 func NewZombie(bounds g.Rect) *Zombie {
 	zombie := &Zombie{}
 
@@ -34,6 +36,7 @@ func NewZombie(bounds g.Rect) *Zombie {
 	return zombie
 }
 
+// Update updates the zombie
 func (zombie *Zombie) Update(game *Game, dt float32) {
 	var nearest *Entity
 	mindist := float32(1000000.0)
@@ -65,7 +68,7 @@ func (zombie *Zombie) Update(game *Game, dt float32) {
 	zombie.Distance += zombie.Velocity.Scale(dt).Length()
 	if zombie.Distance > 0.1 {
 		zombie.Distance -= 0.1
-		zombie.Frame += 1
+		zombie.Frame++
 	}
 }
 
@@ -84,6 +87,7 @@ func (zombie *Zombie) respawn(bounds g.Rect) {
 	zombie.Velocity = g.V2{}
 }
 
+// DeathStrength retuns the death strength
 func (zombie *Zombie) DeathStrength() (float32, bool) {
 	if len(zombie.Collision) == 0 {
 		return 0, false
@@ -96,6 +100,7 @@ func (zombie *Zombie) DeathStrength() (float32, bool) {
 	return total, total > 1.0
 }
 
+// Respawn respawns a zombie
 func (zombie *Zombie) Respawn(bounds g.Rect) {
 	_, dead := zombie.DeathStrength()
 	if dead {
@@ -103,6 +108,7 @@ func (zombie *Zombie) Respawn(bounds g.Rect) {
 	}
 }
 
+// Render renders the zombie
 func (zombie *Zombie) Render(game *Game) {
 	gl.PushMatrix()
 	{

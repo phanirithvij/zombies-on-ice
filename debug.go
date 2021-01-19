@@ -6,6 +6,7 @@ import (
 	"github.com/adinfinit/zombies-on-ice/g"
 )
 
+// RenderAxis renders the axis
 func RenderAxis() {
 	gl.LineWidth(1)
 
@@ -26,6 +27,7 @@ func RenderAxis() {
 	gl.End()
 }
 
+// RenderVector renders the vector
 func RenderVector(at g.V2, dir g.V2, col g.Color) {
 	gl.LineWidth(1)
 	//gl.Color4f(0, 0, 1, 1)

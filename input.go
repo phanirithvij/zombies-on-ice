@@ -6,6 +6,7 @@ import (
 	"github.com/adinfinit/zombies-on-ice/g"
 )
 
+// Controller a controller
 type Controller struct {
 	ID int
 
@@ -21,16 +22,19 @@ type Controller struct {
 	Right Analog
 }
 
+// Analog analog
 type Analog struct {
 	Direction g.V2
 	Hold      bool
 	Trigger   bool
 }
 
+// ControllerUpdater updater interface
 type ControllerUpdater interface {
 	Update(input *Controller, window *glfw.Window)
 }
 
+// DPad a dpad
 type DPad struct {
 	Up    bool
 	Down  bool
@@ -38,22 +42,24 @@ type DPad struct {
 	Right bool
 }
 
+// Direction changes direction
 func (dpad DPad) Direction() (r g.V2) {
 	if dpad.Down {
-		r.Y -= 1
+		r.Y--
 	}
 	if dpad.Up {
-		r.Y += 1
+		r.Y++
 	}
 	if dpad.Left {
-		r.X -= 1
+		r.X--
 	}
 	if dpad.Right {
-		r.X += 1
+		r.X++
 	}
 	return
 }
 
+// Merge merges controllers
 func (a *Controller) Merge(b *Controller) {
 	if !b.Connected {
 		return
@@ -75,11 +81,13 @@ func (a *Controller) Merge(b *Controller) {
 	a.Y = a.Y || b.Y
 }
 
+// Active if controller is active
 func (a *Controller) Active() bool {
 	return a.DPad.Up || a.DPad.Down || a.DPad.Left || a.DPad.Right ||
 		a.Start || a.A || a.B || a.X || a.Y
 }
 
+// Keyboard a keyboard
 type Keyboard struct {
 	Connected bool
 
@@ -88,6 +96,7 @@ type Keyboard struct {
 	A, B, X, Y            glfw.Key
 }
 
+// Update updates the input
 func (key *Keyboard) Update(input *Controller, window *glfw.Window) {
 	getkey := func(button glfw.Key) bool {
 		if button == glfw.KeyUnknown || button == 0 {
@@ -126,16 +135,18 @@ func (key *Keyboard) Update(input *Controller, window *glfw.Window) {
 	input.Connected = key.Connected
 }
 
+// Gamepad a gamepad
 type Gamepad struct {
-	Id       glfw.Joystick
+	ID       glfw.Joystick
 	DeadZone float32
 }
 
+// Update updates the gamepad
 func (gamepad Gamepad) Update(input *Controller, window *glfw.Window) {
 	// clear state
 	*input = Controller{ID: input.ID, Updater: input.Updater}
 
-	joy := glfw.Joystick(gamepad.Id)
+	joy := glfw.Joystick(gamepad.ID)
 
 	axes := joy.GetAxes()
 	buttons := joy.GetButtons()

@@ -7,10 +7,13 @@ import (
 )
 
 const (
+	// DecalFadeTime fade time
 	DecalFadeTime = 15.0
-	DecalMax      = 20.0
+	// DecalMax max
+	DecalMax = 20.0
 )
 
+// Particles a list of particles
 type Particles struct {
 	List []*Particle
 
@@ -18,6 +21,7 @@ type Particles struct {
 	Decals    [2048]Particle
 }
 
+// Particle a particle
 type Particle struct {
 	Position        g.V2
 	Velocity        g.V2
@@ -28,8 +32,10 @@ type Particle struct {
 	Fade            float32
 }
 
+// NewParticles a new instance of particles
 func NewParticles() *Particles { return &Particles{} }
 
+// Spawn spawns the particles
 func (ps *Particles) Spawn(amount int, position g.V2, velocity g.V2, radius float32, spread float32) {
 	for i := 0; i < amount; i++ {
 		rotate := g.RandomBetween(-spread/2, spread/2)
@@ -45,6 +51,7 @@ func (ps *Particles) Spawn(amount int, position g.V2, velocity g.V2, radius floa
 	}
 }
 
+// Update updates the particles
 func (ps *Particles) Update(dt float32) {
 	for i := range ps.Decals {
 		ps.Decals[i].Fade -= dt
@@ -69,6 +76,7 @@ func (ps *Particles) decalize(p *Particle) {
 	ps.Decals[ps.DecalHead] = *p
 }
 
+// Kill kills particles
 func (ps *Particles) Kill(bounds g.Rect) {
 	list := ps.List[:0:cap(ps.List)]
 	for _, p := range ps.List {
@@ -85,6 +93,7 @@ func (ps *Particles) Kill(bounds g.Rect) {
 	ps.List = list
 }
 
+// RenderDecals renders decals
 func (ps *Particles) RenderDecals(game *Game) {
 	tex := game.Assets.TextureRepeat("assets/blood.png")
 	for i := range ps.Decals {
@@ -98,12 +107,13 @@ func (ps *Particles) RenderDecals(game *Game) {
 		gl.Rotatef(g.RadToDeg(p.Rotation), 0, 0, -1)
 
 		sat := g.Sat8(p.Fade / DecalMax)
-		color := g.Color{sat, sat, sat, sat}
+		color := g.Color{R: sat, G: sat, B: sat, A: sat}
 		tex.DrawColored(g.NewCircleRect(p.Radius), color)
 		gl.PopMatrix()
 	}
 }
 
+// Render renders the particles
 func (ps *Particles) Render(game *Game) {
 	tex := game.Assets.TextureRepeat("assets/blood.png")
 	for _, p := range ps.List {

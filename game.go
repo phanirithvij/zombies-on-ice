@@ -9,6 +9,7 @@ import (
 	"github.com/adinfinit/zombies-on-ice/g"
 )
 
+// Layers
 const (
 	ZeroLayer = CollisionLayer(1 << iota)
 	PlayerLayer
@@ -17,6 +18,7 @@ const (
 	PowerupLayer
 )
 
+// Game main game struct
 type Game struct {
 	Assets      *Assets
 	Font        *g.Font
@@ -37,13 +39,14 @@ type Game struct {
 	lastPlayerID int
 }
 
+// NewGame new instance of a game
 func NewGame() *Game {
 	game := &Game{}
 
 	game.Assets = NewAssets()
 	game.Font = game.Assets.SpriteFont(
 		"assets/arcade_43x74.png",
-		g.V2{43, 74},
+		g.V2{X: 43, Y: 74},
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:?!-_~#\"'&()[]|`\\/@°+=*$£€<>%")
 
 	game.Controllers = NewControllers()
@@ -63,6 +66,7 @@ func NewGame() *Game {
 	return game
 }
 
+// Update updates the world
 func (game *Game) Update(window *glfw.Window, now float64) {
 	game.Assets.Reload()
 
@@ -151,7 +155,7 @@ func (game *Game) Update(window *glfw.Window, now float64) {
 					game.Particles.Spawn(32,
 						collision.A.Position, collision.B.Velocity, 0.1, 0.4)
 
-					playerByHammer[collision.B].Points += 1
+					playerByHammer[collision.B].Points++
 				}
 			}
 		}
@@ -222,7 +226,7 @@ func (game *Game) Update(window *glfw.Window, now float64) {
 			}
 
 			if player.Died() {
-				game.Particles.Spawn(64, player.Survivor.Position, g.V2{5, 0}, 0.2, g.Tau)
+				game.Particles.Spawn(64, player.Survivor.Position, g.V2{X: 5, Y: 0}, 0.2, g.Tau)
 				player.Dead = true
 			}
 		}
@@ -241,6 +245,7 @@ func (game *Game) Update(window *glfw.Window, now float64) {
 	}
 }
 
+// Render renders the game
 func (game *Game) Render(window *glfw.Window) {
 	gl.ClearColor(0, 0, 0, 1)
 	gl.Clear(gl.COLOR_BUFFER_BIT)
@@ -302,8 +307,8 @@ func (game *Game) Render(window *glfw.Window) {
 	game.Particles.Render(game)
 
 	zero := g.V2{
-		-screenSize.X/2 + 1,
-		screenSize.Y/2 - 2,
+		X: -screenSize.X/2 + 1,
+		Y: screenSize.Y/2 - 2,
 	}
 
 	for _, player := range game.Players {
@@ -318,6 +323,7 @@ func (game *Game) Render(window *glfw.Window) {
 	game.Spawner.Render(game)
 }
 
+// Unload unloads all the assets
 func (game *Game) Unload() {
 	game.Assets.Unload()
 }

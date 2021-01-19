@@ -6,6 +6,7 @@ import (
 	"github.com/adinfinit/zombies-on-ice/g"
 )
 
+// Spawner a spawner
 type Spawner struct {
 	NoPlayers bool
 
@@ -18,6 +19,7 @@ type Spawner struct {
 	PowerupCooldown float32
 }
 
+// NewSpawner a new instance of Spawner
 func NewSpawner() *Spawner {
 	return &Spawner{}
 }
@@ -34,7 +36,7 @@ func (spawner *Spawner) startNextWave(game *Game, dt float32) {
 	}
 
 	spawner.DisplayWaveMessage = 3.0
-	spawner.Wave += 1
+	spawner.Wave++
 
 	zombieCount := spawner.Wave * 5
 	if spawner.Wave > 3 {
@@ -63,6 +65,7 @@ func (spawner *Spawner) resetGame(game *Game) {
 	game.Zombies = []*Zombie{}
 }
 
+// Update updates the spawner
 func (spawner *Spawner) Update(game *Game, dt float32) {
 	spawner.DisplayWaveMessage -= dt
 	spawner.DisplayDeathMessage -= dt
@@ -103,13 +106,14 @@ func (spawner *Spawner) Update(game *Game, dt float32) {
 	}
 }
 
+// Render renders the overlay
 func (spawner *Spawner) Render(game *Game) {
 	if spawner.NoPlayers {
 		game.Font.DrawLines([]string{
 			"Press WASD",
 			"Press Arrows",
 			"Press Start on Gamepad",
-		}, g.V2{-12.0, 1.0}, 2.0, 1.5)
+		}, g.V2{X: -12.0, Y: 1.0}, 2.0, 1.5)
 
 		return
 	}
@@ -118,7 +122,7 @@ func (spawner *Spawner) Render(game *Game) {
 		text := fmt.Sprintf("Death at Wave %v", spawner.Wave)
 		height := float32(3.0)
 		width := game.Font.Width(text, height)
-		pos := g.V2{-width / 2, height / 2}
+		pos := g.V2{X: -width / 2, Y: height / 2}
 		game.Font.Draw(text, pos, height)
 		pos.Y -= height * 0.7
 
@@ -139,5 +143,5 @@ func (spawner *Spawner) Render(game *Game) {
 	text := fmt.Sprintf("Wave %v", spawner.Wave)
 	height := float32(3.0)
 	width := game.Font.Width(text, height)
-	game.Font.Draw(text, g.V2{-width / 2, height / 2}, height)
+	game.Font.Draw(text, g.V2{X: -width / 2, Y: height / 2}, height)
 }
